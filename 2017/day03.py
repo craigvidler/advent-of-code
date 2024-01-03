@@ -13,7 +13,6 @@ def part1(n):
     # next odd number above sqrt(n).
 
     ceil_root = ceil(n ** 0.5)
-    ceil_root = ceil_root + 1 if ceil_root % 2 == 0 else ceil_root
     side = ceil_root - 1
     tier = ceil_root // 2
     dist_to_corner = (ceil_root ** 2 - n) % side
