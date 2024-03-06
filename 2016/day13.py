@@ -19,10 +19,10 @@ def bfs(start, end=None, limit=None):
     while q:
         current = q.popleft()
 
-        if limit and path_length(current, previous) > limit:
+        if limit and path_length(current, start, previous) > limit:
             return len(previous)
         if end and current == end:
-            return path_length(current, previous) - 1
+            return path_length(current, start, previous) - 1
 
         for neighbor in neighbors(*current):
             if neighbor not in previous:
@@ -41,12 +41,8 @@ def is_passage(x, y):
     return n.bit_count() % 2 == 0
 
 
-def path_length(node, previous):
-    path = [node]
-    while node != START:
-        node = previous[node]
-        path.append(node)
-    return len(path)
+def path_length(node, start, previous):
+    return 1 if node == start else 1 + path_length(previous[node], start, previous)
 
 
 if __name__ == '__main__':
