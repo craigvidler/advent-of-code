@@ -64,6 +64,12 @@ computation-heavy. Maybe with a better heuristic A* could outperform
 Dijkstra, but maybe it's simply not the best choice for this kind of
 problem.
 
+[Later: I tried A* with Chebyshev distance and got the time down to ~1.75s. It
+might be faster to compute than Manhattan, but also the latter was acting as
+an inconsistent heuristic and forcing me to check for node re-expansion.
+Chebyshev saved time by allowing me to avoid checking/revisiting nodes and
+to swap a `costs` table for just a `visited` set.]
+
 Briefly experimented with Dijkstra with a Fib Heap for pq and decrease-key
 (ie eager vs the current lazy version of Dijkstra), but the results were very
 slow (~14s) - some of that surely improvable with better implementation, but
