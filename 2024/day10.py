@@ -7,9 +7,9 @@ from aocd import data
 
 
 def neighbors(r, c, grid):
-    for row, col in (r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1):
-        if 0 <= row < MAXROW and 0 <= col < MAXCOL:
-            yield (row, col)
+    for nr, nc in (r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1):
+        if 0 <= nr < MAXROW and 0 <= nc < MAXCOL:
+            yield nr, nc
 
 
 def get_heads(grid):
@@ -19,17 +19,29 @@ def get_heads(grid):
                 yield r, c
 
 
-def dfs(grid, r, c, level, visited=None):
-    if visited is None:
-        visited = set()
+def dfs(grid, r, c, peaks):
+    if ((r, c)) in peaks:
+        return
 
-    if ((r, c), level) not in visited:
-        visited.add(((r, c), level))
-        for r, c in neighbors(r, c, grid):
-            if grid[r][c] == level + 1:
-                dfs(grid, r, c, level + 1, visited)
+    if grid[r][c] == 9:
+        peaks.add((r, c))
 
-    return visited
+    for nr, nc in neighbors(r, c, grid):
+        if grid[nr][nc] == grid[r][c] + 1:
+            dfs(grid, nr, nc, peaks)
+
+    return peaks
+
+
+def p2_dfs(grid, r, c, count):
+    if grid[r][c] == 9:
+        count += 1
+
+    for nr, nc in neighbors(r, c, grid):
+        if grid[nr][nc] == grid[r][c] + 1:
+            count = p2_dfs(grid, nr, nc, count)
+
+    return count
 
 
 def parse(data):
@@ -38,10 +50,16 @@ def parse(data):
 
 def part1(grid):
     total = 0
-
     for r, c in get_heads(grid):
-        tails = dfs(grid, r, c, level=0)
-        total += len([t for t, level in tails if level == 9])
+        peaks = set()
+        total += len(dfs(grid, r, c, peaks))
+    return total
+
+
+def part2(grid):
+    total = count = 0
+    for r, c in get_heads(grid):
+        total += p2_dfs(grid, r, c, count)
     return total
 
 
@@ -49,3 +67,4 @@ if __name__ == "__main__":
     grid = parse(data)
     MAXROW, MAXCOL = len(grid), len(grid[0])
     print("Part 1:", part1(grid))
+    print("Part 2:", part2(grid))
