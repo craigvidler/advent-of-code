@@ -16,17 +16,19 @@ def parse(data):
 
 
 def run(steps, pointer=START):
-    # bruteforce: just step one number at a time, check and total as appropriate.
     p1_total = p2_total = 0
 
     for step in steps:
         dir = -1 if step < 0 else 1
 
-        for _ in range(0, step, dir):
+        q, r = divmod(step, DIALSIZE * dir)
+        p2_total += q
+
+        for _ in range(0, r, dir):
             pointer += dir
             p2_total += pointer % DIALSIZE == 0
 
-        pointer = pointer % DIALSIZE
+        pointer %= DIALSIZE  # ensure we're brought back to 0-99
         p1_total += pointer == 0
 
     return p1_total, p2_total
