@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aoc"
+version = "0.0.1"
+description = "My Advent of Code solutions."
+dependencies = [
+    "advent_of_code_data",
+    "advent_of_code_ocr",
+    "more_itertools",
+    "numpy",
+    "parse"
+]
